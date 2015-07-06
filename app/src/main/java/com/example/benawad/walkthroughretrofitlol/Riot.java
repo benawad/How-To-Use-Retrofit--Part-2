@@ -15,4 +15,11 @@ public interface Riot {
             Callback<Summoner> cb
     );
 
+    @GET("/api/lol/na/v1.3/stats/by-summoner/{sumId}/ranked")
+    void getRankedStats(
+            @Path("sumId") String sumId,
+            @Query("api_key") String apiKey,
+            Callback<Champions> cb
+    );
+
 }

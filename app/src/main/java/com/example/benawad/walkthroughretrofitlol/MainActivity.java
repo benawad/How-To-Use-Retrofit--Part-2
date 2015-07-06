@@ -55,7 +55,29 @@ public class MainActivity extends AppCompatActivity {
                 service.getSummonerId(encodedText, API_KEY, new Callback<Summoner>() {
                     @Override
                     public void success(Summoner summoner, Response response) {
-                        mOutput.setText(summoner.getId()+"");
+                        RestAdapter restAdapter2 = new RestAdapter.Builder()
+                                .setEndpoint("https://na.api.pvp.net")
+                                .build();
+
+                        Riot service2 = restAdapter2.create(Riot.class);
+                        service2.getRankedStats(summoner.getId() + "", API_KEY, new Callback<Champions>() {
+                            @Override
+                            public void success(Champions champions, Response response) {
+                                for (Champion champ : champions.getChampions()){
+                                    if(champ.getId() == 0){
+                                        String gamesPlayed = champ.getStats().getTotalSessionsPlayed()+"";
+                                        mOutput.setText("You have played " + gamesPlayed + " ranked games this season.");
+                                        break;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                //do something when failure strikes!
+                            }
+                        });
+
                     }
 
                     @Override
